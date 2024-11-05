@@ -1,13 +1,126 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-bg: #ffffff; /* White background */
+  --secondary-bg: #000000; /* Black background for buttons */
+  --primary-text: #000000; /* Black text */
+  --secondary-text: #ffffff; /* White text for buttons */
+  --border-color: #333333; /* Gray border */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--secondary-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-text);
+  font-weight: 600;
+}
+
+button, .btn {
+  background-color: var(--secondary-bg); /* Black background for buttons */
+  color: var(--secondary-text); /* White text for buttons */
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--primary-text); /* White background on hover */
+  color: var(--secondary-bg); /* Black text on hover */
+}
+
+input, textarea, select {
+  background-color: var(--secondary-bg); /* Dark input backgrounds */
+  color: var(--primary-text); /* Black text in inputs */
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--secondary-text);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary-text);
+  outline: none;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--primary-text);
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--secondary-bg); /* Black background for table headers */
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--primary-bg);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--secondary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+/* Dark mode for MUI components (if needed) */
+.MuiPaper-root {
+  background-color: var(--primary-bg) !important; /* White background for MUI Paper */
+  color: var(--primary-text) !important; /* Black text for MUI Paper */
+}
+
+.MuiButton-root {
+  background-color: var(--secondary-bg) !important; /* Black background for MUI Buttons */
+  color: var(--secondary-text) !important; /* White text for MUI Buttons */
+}
+
+.MuiButton-root:hover {
+  background-color: var(--primary-bg) !important; /* White background on hover */
+  color: var(--secondary-bg) !important;
+}
+
+.MuiTextField-root input {
+  background-color: var(--secondary-text) !important; /* Dark input backgrounds */
+  color: var(--primary-text) !important; /* Black text in inputs */
+}
+
+.MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color) !important; /* Border color for inputs */
+}
+
+.MuiTextField-root input:focus {
+  border-color: var(--primary-text) !important; /* Focus border color */
 }

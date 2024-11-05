@@ -1,0 +1,5 @@
+{/* <Route element={<ProtectedRoute isAllowed={userIsAdmin} redirectPath="/login" />}>
+    <Route element={<AdminLayout />}>
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+    </Route>
+</Route> */}

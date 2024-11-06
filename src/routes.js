@@ -14,6 +14,7 @@ const AppRoutes = () => (
     </Route>
     <Route element={<AdminLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/orders" element={<p>Orders</p>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

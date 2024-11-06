@@ -6,7 +6,7 @@ import { logoutRequest } from "../hooks/react-query/auth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { toast } from "react-toastify";
 
-const Logout = () => {
+const LogOut = () => {
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: logoutRequest,
@@ -27,6 +27,7 @@ const Logout = () => {
     <Button
       onClick={handleLogout}
       disabled={mutation.isLoading}
+      sx={{width : "100%"}}
       style={{
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Customize shadow here
         transition: "box-shadow 0.3s ease-in-out",
@@ -44,4 +45,4 @@ const Logout = () => {
   );
 };
 
-export default Logout;
+export default LogOut;

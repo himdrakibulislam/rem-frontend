@@ -42,12 +42,12 @@ const CustomTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
-const CustomTab = styled(Tab)(({ theme }) => ({
+const CustomTab = styled(Tab)(({ theme, dynamicWidth }) => ({
   margin: "4px",
   textTransform: "none",
   fontWeight: "bold",
   borderRadius: "3px",
-  width: "47.5%",
+  width: dynamicWidth,
   "&:hover": {
     backgroundColor: "#ffffff",
     boxShadow: "0 4px 20px rgba(255, 255, 255, 0.5)",
@@ -59,7 +59,7 @@ const CustomTab = styled(Tab)(({ theme }) => ({
   },
 }));
 
-const CustomTabComponent = ({ tabs }) => {
+const CustomTabComponent = ({ tabs,width= "47.5%" }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -67,11 +67,11 @@ const CustomTabComponent = ({ tabs }) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box >
       <Box sx={{ backgroundColor: "#b0b0b2a5", borderRadius: "6px" }}>
-        <CustomTabs centered value={value} onChange={handleChange}>
+        <CustomTabs  value={value} onChange={handleChange}>
           {tabs.map((tab, index) => (
-            <CustomTab label={tab.label} {...a11yProps(index)} key={index} />
+            <CustomTab label={tab.label} dynamicWidth={width} {...a11yProps(index)} key={index} />
           ))}
         </CustomTabs>
       </Box>

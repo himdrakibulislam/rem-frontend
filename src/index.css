@@ -78,7 +78,7 @@ th, td {
 }
 
 th {
-  background-color: var(--secondary-bg); /* Black background for table headers */
+  background-color: var(--secondary-text); /* Black background for table headers */
 }
 
 tbody tr:nth-child(even) {

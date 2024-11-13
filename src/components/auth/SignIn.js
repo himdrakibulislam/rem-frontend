@@ -56,7 +56,7 @@ export default function SignIn() {
             }}
           >
             Don't have an account?{" "}
-            <Link to="/dashboard" style={{ textDecoration: "underline" }}>
+            <Link to="/sign-up" style={{ textDecoration: "underline" }}>
               Register here
             </Link>
           </Typography>

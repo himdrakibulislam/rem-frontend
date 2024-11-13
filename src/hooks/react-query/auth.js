@@ -15,6 +15,10 @@ export const logoutRequest = async () => {
     localStorage.removeItem("token");
     return response.data;
 };
+export const ForgotPasswordRequest = async (credentials) => {
+    const response = await axios.post('/api/auth/password/forgot',credentials); 
+    return response.data;
+};
 
 export function useAuthMe() {
     return useQuery({

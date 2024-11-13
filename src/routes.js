@@ -6,11 +6,15 @@ import NotFound from "./pages/404";
 import AuthLayout from "./layouts/auth/AuthLayout";
 import AdminLayout from "./layouts/dashboard/AdminLayout";
 import Dashboard from "./pages/Dashboard";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/forgot-password";
 
 const AppRoutes = () => (
   <Routes>
     <Route element={<AuthLayout />}>
       <Route path="/" element={<Home />} />
+      <Route path="/sign-up" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Route>
     <Route element={<AdminLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />

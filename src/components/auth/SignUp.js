@@ -15,10 +15,37 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { registerUserRequest } from "../../hooks/react-query/auth";
+import { toast } from "react-toastify";
+
 export default function SignUp() {
   const { control, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: registerUserRequest,
+    retry: 1,
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.access_token);
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      if (error.response && error.response.status === 422) {
+        const validationErrors = error.response.data;
+        // Display each validation error
+        Object.values(validationErrors).forEach((errorMessages) => {
+          errorMessages.forEach((message) => {
+            toast.error(message);
+          });
+        });
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
+    },
+  });
   const onSubmit = (data) => {
-    console.log("data", data);
+    mutation.mutate(data);
   };
   return (
     <Container
@@ -88,7 +115,7 @@ export default function SignUp() {
             {/* full name */}
             <Grid item xs={12} md={6}>
               <Controller
-                name="full_name"
+                name="name"
                 control={control}
                 defaultValue=""
                 rules={{
@@ -654,6 +681,9 @@ export default function SignUp() {
                     </Typography>
                     <FormControl fullWidth variant="outlined" error={!!error}>
                       <Select {...field} displayEmpty>
+                      <MenuItem value="">
+                          <em>Select an option</em>
+                        </MenuItem>
                         <MenuItem value="option1">Option 1</MenuItem>
                         <MenuItem value="option2">Option 2</MenuItem>
                         <MenuItem value="option3">Option 3</MenuItem>
@@ -698,6 +728,70 @@ export default function SignUp() {
                         </Typography>
                       )}
                     </FormControl>
+                  </>
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              {/* Password Field */}
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                }}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Typography variant="body1" sx={{ my: 0, py: 0 }}>
+                      password
+                    </Typography>
+                    <TextField
+                      {...field}
+                      type="password"
+                      variant="outlined"
+                      fullWidth
+                      placeholder="Password"
+                      margin="normal"
+                      error={!!error}
+                      helperText={error ? error.message : ""}
+                    />
+                  </>
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              {/* Password confirmation Field */}
+              <Controller
+                name="password_confirmation"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                }}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Typography variant="body1" sx={{ my: 0, py: 0 }}>
+                      Password confirmation
+                    </Typography>
+                    <TextField
+                      {...field}
+                      type="password"
+                      variant="outlined"
+                      fullWidth
+                      placeholder="Password"
+                      margin="normal"
+                      error={!!error}
+                      helperText={error ? error.message : ""}
+                    />
                   </>
                 )}
               />

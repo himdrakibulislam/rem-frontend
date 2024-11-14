@@ -13,13 +13,23 @@ export function AuthProvider({ children }) {
       setUser(data);
     }
   }, [data]);
-  console.log('Current user:', user?.name); 
+
+  // Check if the user has a specific permission
+  const hasPermission = (permission) => {
+    return user?.permissions.includes(permission);
+  };
+
+  // Check if the user has a specific role
+  const hasRole = (role) => {
+    return user?.roles.includes(role);
+  };
+  console.log("Current user:", user?.name);
   if (isLoading) {
     return <ProgressBar />;
   }
-  
+
   return (
-    <AuthContext.Provider value={{ user: data, setUser }}>
+    <AuthContext.Provider value={{ user: data, setUser,hasPermission, hasRole }}>
       {children}
     </AuthContext.Provider>
   );

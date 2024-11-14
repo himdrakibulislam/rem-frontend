@@ -8,6 +8,7 @@ import AdminLayout from "./layouts/dashboard/AdminLayout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/forgot-password";
+import UsersPermission from "./pages/users-permission";
 
 const AppRoutes = () => (
   <Routes>
@@ -18,7 +19,8 @@ const AppRoutes = () => (
     </Route>
     <Route element={<AdminLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/orders" element={<p>Orders</p>} />
+      <Route path="/properties" element={<p>Properties</p>} />
+      <Route path="/users-permission" element={<UsersPermission/>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

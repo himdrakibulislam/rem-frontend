@@ -14,6 +14,7 @@ import logo from "../../assets/logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import DashboardAppBar from "../AppBar";
 import { DASHBOARD_NAVIGATION } from "../../data/dashboardnav";
+import { useAuth } from "../../context/AuthContext";
 const drawerWidth = 240;
 
 function AdminSideBar(props) {
@@ -21,7 +22,7 @@ function AdminSideBar(props) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-
+  const { hasRole, hasPermission } = useAuth();
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -61,6 +62,15 @@ function AdminSideBar(props) {
       <Divider />
       <List>
         {DASHBOARD_NAVIGATION.map((nav, index) => {
+          const hasAccess =
+            (!nav.requiredRoles ||
+              nav.requiredRoles.some((role) => hasRole(role))) &&
+            (!nav.requiredPermissions ||
+              nav.requiredPermissions.some((permission) =>
+                hasPermission(permission)
+              ));
+          // Render the item only if the user has access
+          if (!hasAccess) return null;
           const isSelected = location.pathname === `/${nav.path}`;
           return (
             <ListItem key={index} disablePadding>

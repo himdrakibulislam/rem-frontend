@@ -10,6 +10,10 @@ export const loginWithEmailRequest = async (credentials) => {
     const response = await axios.post('/api/auth/login', credentials); 
     return response.data; // Return the response data
 };
+export const registerUserRequest = async (credentials) => {
+    const response = await axios.post('/api/auth/register', credentials); 
+    return response.data; // Return the response data
+};
 export const logoutRequest = async () => {
     const response = await axios.post('/api/auth/logout'); 
     localStorage.removeItem("token");

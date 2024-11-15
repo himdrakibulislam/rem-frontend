@@ -1,4 +1,5 @@
 import CustomTabComponent from "../components/CustomTab";
+import RolePermission from "../components/RolePermission";
 import UserTable from "../components/UserTable";
 import { useAuth } from "../context/AuthContext";
 
@@ -11,7 +12,10 @@ export default function UsersPermission() {
           label: "Users",
           content: <UserTable />,
         } ,
-        { label: "Roles & Permissions", content: "Roles And Permissions" },
+        hasPermission("manage_role_permission") && {
+          label: "Roles & Permissions",
+          content: <RolePermission/>,
+        } 
       ].filter(Boolean)}
     />
   );

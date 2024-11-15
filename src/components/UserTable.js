@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,26 +8,31 @@ import {
   TableRow,
   Paper,
   TablePagination,
+  Chip,
 } from "@mui/material";
+import { useQuery } from '@tanstack/react-query';
 import axios from "../lib/axios/axios";
+import ProgressBar from "./ProgressBar";
+
+// Function to fetch user data
+const fetchUsers = async (page, rowsPerPage) => {
+  const response = await axios.get(`/api/get-users?page=${page + 1}&per_page=${rowsPerPage}`);
+  return response.data;
+};
 
 const UserTable = () => {
-  const [users, setUsers] = useState([]);
+  document.title = 'Users';
+  
+  // States for pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [totalUsers, setTotalUsers] = useState(0);
 
-  // Fetch users based on the current page and rows per page
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(
-        `/api/get-users?page=${page + 1}&per_page=${rowsPerPage}`
-      );
-      setUsers(response.data.data);
-      setTotalUsers(response.data.total);
-    };
-    fetchData();
-  }, [page, rowsPerPage]);
+  // Fetch data using React Query
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['users', page, rowsPerPage], // Query key with dependencies
+    queryFn: () => fetchUsers(page, rowsPerPage), // Query function
+    keepPreviousData: true, // To keep previous data while loading new data
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -35,8 +40,11 @@ const UserTable = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(0); // Reset page to 0 when rows per page changes
   };
+
+  if (isLoading) return <ProgressBar/>;
+  if (error) return <div>Error loading users!</div>;
 
   return (
     <div className="container mx-auto p-4">
@@ -53,7 +61,7 @@ const UserTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {data?.data.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -63,7 +71,7 @@ const UserTable = () => {
                 <TableCell>
                   {user.email_verified_at
                     ? new Date(user.email_verified_at).toLocaleDateString()
-                    : "Not Verified"}
+                    : <Chip label="Not Verified" size="small" color="error" />}
                 </TableCell>
               </TableRow>
             ))}
@@ -72,7 +80,7 @@ const UserTable = () => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={totalUsers}
+        count={data?.total || 0}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

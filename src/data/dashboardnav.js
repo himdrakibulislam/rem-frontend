@@ -19,6 +19,6 @@ export const DASHBOARD_NAVIGATION = [
     path: "users-permission",
     title: "Users & Permissions",
     icon: <GroupIcon />,
-    // requiredPermissions: ["user"]
+    requiredPermissions: ["manage_role_permission","users_list"]
   },
 ];

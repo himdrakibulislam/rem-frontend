@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/forgot-password";
 import UsersPermission from "./pages/users-permission";
+import ResetPassword from "./pages/reset-password";
 
 const AppRoutes = () => (
   <Routes>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Home />} />
       <Route path="/sign-up" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Route>
     <Route element={<AdminLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />

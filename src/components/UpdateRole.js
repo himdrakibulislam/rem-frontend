@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   TextField,
   Typography,
-  Modal,
   CircularProgress,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
@@ -13,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { updateRole, useAllPermissions } from "../hooks/react-query/role-permission";
 import { handleValidationErrors } from "../utiles/errorHandle";
+import CustomModal from "./CustomModal";
 
 function UpdateRole({ role, open, setOpen, onUpdateSuccess}) {
   const { control, handleSubmit, setValue, reset } = useForm();
@@ -54,15 +54,8 @@ function UpdateRole({ role, open, setOpen, onUpdateSuccess}) {
   };
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-      <div
-        style={{
-          padding: 20,
-          maxWidth: 400,
-          margin: "auto",
-          backgroundColor: "#fff",
-        }}
-      >
+    <CustomModal open={open} handleClose={() => setOpen(false)}>
+      
         <Typography variant="h6">Update Role</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Role Name Input */}
@@ -120,8 +113,7 @@ function UpdateRole({ role, open, setOpen, onUpdateSuccess}) {
             {mutation.isLoading ? "Updating..." : "Update"}
           </Button>
         </form>
-      </div>
-    </Modal>
+    </CustomModal>
   );
 }
 

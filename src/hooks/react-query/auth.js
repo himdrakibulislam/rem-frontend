@@ -27,6 +27,10 @@ export const ResetPasswordRequest = async (credentials) => {
     const response = await axios.post('/api/auth/password-reset',credentials); 
     return response.data;
 };
+export const changePasswordRequest = async (credentials) => {
+    const response = await axios.post('/api/auth/password/change',credentials); 
+    return response.data;
+};
 
 export function useAuthMe() {
     return useQuery({

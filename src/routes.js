@@ -10,6 +10,9 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/forgot-password";
 import UsersPermission from "./pages/users-permission";
 import ResetPassword from "./pages/reset-password";
+import GetAProperty from "./pages/property/getAProperty";
+import GetAFlatDetails from "./pages/flat/GetAFlat";
+import Settings from "./pages/settings";
 
 const AppRoutes = () => (
   <Routes>
@@ -22,7 +25,10 @@ const AppRoutes = () => (
     <Route element={<AdminLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/properties" element={<p>Properties</p>} />
+      <Route path="/property/:id" element={<GetAProperty/>} />
+      <Route path="/property/:id/flat/:flatId" element={<GetAFlatDetails />} />
       <Route path="/users-permission" element={<UsersPermission/>} />
+      <Route path="/settings" element={<Settings/>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

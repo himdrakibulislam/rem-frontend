@@ -15,7 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CustomTabComponent from "../components/CustomTab";
 import AddIcon from '@mui/icons-material/Add';
-
+import {Link} from "react-router-dom"
 function Dashboard() {
   const dashboardData = [
     {
@@ -88,7 +88,7 @@ function Dashboard() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {rows.map((row) => (
+                        {rows.map((row,index) => (
                           <TableRow
                             key={row.name}
                             sx={{
@@ -96,12 +96,15 @@ function Dashboard() {
                             }}
                           >
                             <TableCell component="th" scope="row">
-                              {row.name}
+                              <Link to={`/property/${++index}`}>{row.name}</Link>
                             </TableCell>
                             <TableCell >{row.calories}</TableCell>
                             <TableCell >{row.fat}</TableCell>
                             <TableCell >{row.carbs}</TableCell>
-                            <TableCell ><Button sx={{backgroundColor :"white"}}>Edit</Button></TableCell>
+                            <TableCell >
+                              <Button size="small" sx={{backgroundColor :"white"}}>Edit</Button>
+                  
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

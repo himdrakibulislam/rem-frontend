@@ -4,23 +4,17 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-  Avatar,
-  Menu,
-  MenuItem,
-  Divider,
-  Box,
-} from "@mui/material";
+import { Avatar, Menu, MenuItem, Divider, Box } from "@mui/material";
 import Settings from "@mui/icons-material/Settings";
 import { useAuth } from "../context/AuthContext";
 import LogOut from "./Logout";
+import { Link } from "react-router-dom";
 
 function DashboardAppBar({ drawerWidth, handleDrawerToggle }) {
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
- 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -101,12 +95,12 @@ function DashboardAppBar({ drawerWidth, handleDrawerToggle }) {
             </MenuItem>
             <Divider />
 
-            <MenuItem onClick={handleMenuClose}>
+            <MenuItem component={Link} to="/settings" onClick={handleMenuClose}>
               <Settings fontSize="small" />
               Settings
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <LogOut/>
+              <LogOut />
             </MenuItem>
           </Menu>
         </Box>

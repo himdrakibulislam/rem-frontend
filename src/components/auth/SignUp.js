@@ -15,10 +15,11 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { registerUserRequest } from "../../hooks/react-query/auth";
 import { toast } from "react-toastify";
+import WestIcon from '@mui/icons-material/West';
 
 export default function SignUp() {
   const { control, handleSubmit } = useForm();
@@ -66,6 +67,12 @@ export default function SignUp() {
           width: "100%",
         }}
       >
+        <Box sx={{my:1}}>
+        <Link to="/">
+          <WestIcon fontSize="small" /> Back To Login
+        </Link>
+        </Box>
+    
         <Typography variant="h5" component="h3" sx={{ fontWeight: "bold" }}>
           User Registration
         </Typography>
@@ -102,6 +109,11 @@ export default function SignUp() {
                           value="Handed Over Project Client"
                           control={<Radio />}
                           label="Handed Over Project Client"
+                        />
+                        <FormControlLabel
+                          value="tenant"
+                          control={<Radio />}
+                          label="Tenant"
                         />
                       </RadioGroup>
                       {error && (

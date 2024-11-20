@@ -6,7 +6,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppRoutes from './routes'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { fetchSettings } from './hooks/react-query/role-permission';
+
 const queryClient = new QueryClient();
+queryClient.prefetchQuery(["settings"], fetchSettings);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

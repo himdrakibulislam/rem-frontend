@@ -38,13 +38,11 @@ function RolePermission() {
   const handleRoleUpdateSuccess = () => {
     queryClient.invalidateQueries(["rolesWithPermissions"]); // Invalidate the query to trigger a refetch
   };
-  if (isLoading) {
-    return <ProgressBar />;
-  }
+  if (isLoading) return <ProgressBar />;
+  
 
-  if (isError) {
-    return <Typography>Error: {error.message}</Typography>;
-  }
+  if (isError) return <Typography>Error: {error.message}</Typography>;
+  
  
 
   return (

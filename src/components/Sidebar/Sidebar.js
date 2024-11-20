@@ -10,14 +10,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import logo from "../../assets/logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import DashboardAppBar from "../AppBar";
 import { DASHBOARD_NAVIGATION } from "../../data/dashboardnav";
 import { useAuth } from "../../context/AuthContext";
+import Image from "../Image";
+import { useSettings } from "../../hooks/react-query/role-permission";
+import { CircularProgress } from "@mui/material";
 const drawerWidth = 240;
 
 function AdminSideBar(props) {
+  const { data: settings, isLoading } = useSettings();
   const { window } = props;
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -47,15 +50,16 @@ function AdminSideBar(props) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              padding: 2,
-              backgroundColor: "#f5f5f5", // Light background color
-              borderRadius: 2, // Rounded corners
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-              maxWidth: 120, // Limit width for compact look
+              padding: "4px",
+              maxWidth: 250,
               margin: "auto",
             }}
           >
-            <img src={logo} alt="logo" width={100} height={100} />
+            {isLoading ? (
+              <CircularProgress color="success" />
+            ) : (
+              <Image src={settings.logo} alt="logo" className="w-100 h-100" />
+            )}
           </Box>
         }
       />
@@ -144,8 +148,9 @@ function AdminSideBar(props) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 2,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          overflowX: "auto"
         }}
       >
         <Toolbar />

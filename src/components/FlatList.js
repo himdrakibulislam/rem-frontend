@@ -52,15 +52,15 @@ const FlatList = () => {
   };
   const [open, setOpen] = useState(false);
   const { control, handleSubmit } = useForm();
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true); 
   const handleClose = () => setOpen(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
 
-  const handleOpenUpdate = (property) => {
-    setSelectedProperty(property);
-    setOpenUpdate(true);
-  };
+  // const handleOpenUpdate = (property) => {
+  //   setSelectedProperty(property);
+  //   setOpenUpdate(true);
+  // };
 
   const handleCloseUpdate = () => {
     setOpenUpdate(false);

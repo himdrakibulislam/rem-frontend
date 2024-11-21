@@ -12,6 +12,7 @@ import CustomTabComponent from "../components/CustomTab";
 import { useAuth } from "../context/AuthContext";
 import UserTable from "../components/UserTable";
 import PropertyList from "../components/PropertyList";
+import FlatList from "../components/FlatList";
 function Dashboard() {
   const { hasPermission } = useAuth();
   const dashboardData = [
@@ -65,7 +66,7 @@ function Dashboard() {
             },
             {
               label: "Flats",
-              content: <Typography>Flats</Typography>,
+              content: <FlatList/>,
             },
             hasPermission("users_list") && {
               label: "Customers",

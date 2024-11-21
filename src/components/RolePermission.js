@@ -36,7 +36,7 @@ function RolePermission() {
     queryFn: getAllRolesWithPermissions,
   });
   const handleRoleUpdateSuccess = () => {
-    queryClient.invalidateQueries(["rolesWithPermissions"]); // Invalidate the query to trigger a refetch
+    queryClient.invalidateQueries({queryKey:["rolesWithPermissions"]}); // Invalidate the query to trigger a refetch
   };
   if (isLoading) return <ProgressBar />;
   

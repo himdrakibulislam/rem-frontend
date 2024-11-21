@@ -1,12 +1,5 @@
 import React, { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   TablePagination,
   Typography,
   Box,
@@ -24,17 +17,19 @@ import { handleValidationErrors } from "../utiles/errorHandle";
 import { toast } from "react-toastify";
 import { createPropertyRequest } from "../hooks/react-query/property";
 import UpdatePropertyModal from "./UpdatePropertyModal";
+import DataTable from "./TableData";
+import { useSettings } from "../hooks/react-query/role-permission";
 
 // Function to fetch user data
-const getProperties = async (page, rowsPerPage) => {
+const getFlats = async (page, rowsPerPage) => {
   const response = await axios.get(
-    `/api/properties?page=${page + 1}&offset=${rowsPerPage}`
+    `/api/flats?page=${page + 1}&offset=${rowsPerPage}`
   );
   return response.data;
 };
 
-const PropertyList = () => {
-  document.title = "Users";
+const FlatList = () => {
+  document.title = "Flats";
 
   // States for pagination
   const [page, setPage] = useState(0);
@@ -42,11 +37,11 @@ const PropertyList = () => {
 
   // Fetch data using React Query
   const { data, isLoading, error } = useQuery({
-    queryKey: ["getProperties", page, rowsPerPage], // Query key with dependencies
-    queryFn: () => getProperties(page, rowsPerPage), // Query function
+    queryKey: ["getFlats", page, rowsPerPage], // Query key with dependencies
+    queryFn: () => getFlats(page, rowsPerPage), // Query function
     keepPreviousData: true, // To keep previous data while loading new data
   });
-
+  const {data: settings} = useSettings();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -93,7 +88,32 @@ const PropertyList = () => {
 
   if (isLoading) return <ProgressBar />;
   if (error) return <div>Error loading properties!</div>;
+  const columns = [
+    { field: "name", label: "Name" },
+    { field: "size", label: "Size", transform: (value) => `${value} sqft` },
+    { field: "price", label: "Price" },
+    { field: "status", label: "Status" },
+  ];
+  const handleAddFlat = () => {
+    console.log("Redirect to Add Flat form");
+  };
 
+  const renderActions = (row, index) => (
+    <Link to={`/property/${2}/flat/${index + 1}`}>View Details</Link>
+  );
+  const flatStatusStyles = (status) => {
+    switch (status.toLowerCase()) {
+      case "available":
+        return { backgroundColor: "#d4edda", color: "#155724" };
+      case "sold":
+        return { backgroundColor: "#f8d7da", color: "#721c24" };
+      case "reserved":
+        return { backgroundColor: "#fff3cd", color: "#856404" };
+      default:
+        return { backgroundColor: "#e2e3e5", color: "#383d41" };
+    }
+  };
+  
   return (
     <React.Fragment>
       <div style={{ overflowX: "auto" }}>
@@ -104,49 +124,16 @@ const PropertyList = () => {
             my: 2,
           }}
         >
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            Projects
-          </Typography>
-          <Box>
-            <Button onClick={handleOpen}>
-              <AddIcon /> Add Property
-            </Button>
-          </Box>
+          <DataTable
+            title="Flats"
+            columns={columns}
+            data={data.data}
+            actions={renderActions}
+            onAddClick={handleAddFlat}
+            currency={settings.currency}
+            getStatusStyles={flatStatusStyles}
+          />
         </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead className="bg-gray-200">
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Total Flats</TableCell>
-                <TableCell>Availablle Flats</TableCell>
-                <TableCell>Action </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.data.map((property) => (
-                <TableRow key={property.id}>
-                  <TableCell>
-                    <Link to={`/property/${property.id}`}>{property.name}</Link>
-                  </TableCell>
-                  <TableCell>{property.address}</TableCell>
-                  <TableCell>{property.flats_count}</TableCell>
-                  <TableCell>{property.available_flats_count}</TableCell>
-
-                  <TableCell>
-                    <Button
-                      onClick={() => handleOpenUpdate(property)}
-                      variant="contained"
-                    >
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
       </div>
       <TablePagination
         component="div"
@@ -158,7 +145,7 @@ const PropertyList = () => {
       />
       <CustomModal open={open} handleClose={handleClose}>
         <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-          Add Property
+          Add Flat
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* name  */}
@@ -232,4 +219,4 @@ const PropertyList = () => {
   );
 };
 
-export default PropertyList;
+export default FlatList;

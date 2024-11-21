@@ -13,6 +13,7 @@ import { useAuth } from "../context/AuthContext";
 import UserTable from "../components/UserTable";
 import PropertyList from "../components/PropertyList";
 import FlatList from "../components/FlatList";
+import PaymentList from "../components/PaymentList";
 function Dashboard() {
   const { hasPermission } = useAuth();
   const dashboardData = [
@@ -74,7 +75,7 @@ function Dashboard() {
             },
             {
               label: "Payments",
-              content: <Typography>Payments</Typography>,
+              content: <PaymentList/>,
             },
           ].filter(Boolean)}
         />

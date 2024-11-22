@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   TablePagination,
   Typography,
-  Box,
   Button,
   TextField,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "../lib/axios/axios";
 import ProgressBar from "./ProgressBar";
-import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import CustomModal from "./CustomModal";
 import { Controller, useForm } from "react-hook-form";
@@ -24,6 +15,8 @@ import { handleValidationErrors } from "../utiles/errorHandle";
 import { toast } from "react-toastify";
 import { createPropertyRequest } from "../hooks/react-query/property";
 import UpdatePropertyModal from "./UpdatePropertyModal";
+import DataTable from "./TableData";
+import { Link } from "react-router-dom";
 
 // Function to fetch user data
 const getProperties = async (page, rowsPerPage) => {
@@ -90,63 +83,33 @@ const PropertyList = () => {
   const onSubmit = (data) => {
     mutation.mutate(data);
   };
-
+  const columns = [
+    { field: "name", label: "Name" , transform : (value,id) => <Link to={`/property/${id}`}>{value}</Link>},
+    {
+      field: "address",
+      label: "Address"
+    },
+    { field: "flats_count", label: "Total Flats" },
+    { field: "available_flats_count", label: "Availablle Flats" },
+  ];
+  const renderActions = (row) => (
+    <Button onClick={() => handleOpenUpdate(row)} variant="contained">
+      Edit
+    </Button>
+  );
   if (isLoading) return <ProgressBar />;
   if (error) return <div>Error loading properties!</div>;
 
   return (
     <React.Fragment>
       <div style={{ overflowX: "auto" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            my: 2,
-          }}
-        >
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            Projects
-          </Typography>
-          <Box>
-            <Button onClick={handleOpen}>
-              <AddIcon /> Add Property
-            </Button>
-          </Box>
-        </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead className="bg-gray-200">
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Total Flats</TableCell>
-                <TableCell>Availablle Flats</TableCell>
-                <TableCell>Action </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.data.map((property) => (
-                <TableRow key={property.id}>
-                  <TableCell>
-                    <Link to={`/property/${property.id}`}>{property.name}</Link>
-                  </TableCell>
-                  <TableCell>{property.address}</TableCell>
-                  <TableCell>{property.flats_count}</TableCell>
-                  <TableCell>{property.available_flats_count}</TableCell>
-
-                  <TableCell>
-                    <Button
-                      onClick={() => handleOpenUpdate(property)}
-                      variant="contained"
-                    >
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DataTable
+          title="Projects"
+          columns={columns}
+          data={data.data}
+          actions={renderActions}
+          onAddClick={handleOpen}
+        />
       </div>
       <TablePagination
         component="div"

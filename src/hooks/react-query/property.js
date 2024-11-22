@@ -9,3 +9,7 @@ export const updatePropertyRequest = async (id,data) => {
   const response = await axios.put(`api/properties/${id}`, data);
   return response.data;
 };
+export const getAPropertyRequest = async (id) => {
+  const response = await axios.get(`api/properties/${id}`);
+  return response.data;
+};

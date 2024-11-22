@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 // Determine the base URL based on the environment
-const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.REACT_APP_API_URL // Production URL from .env
-    : ''; // Use proxy in development (set in package.json)
-
+// const baseURL =
+//   process.env.NODE_ENV === 'production'
+//     ? process.env.REACT_APP_API_URL 
+//     : ''; 
+const baseURL = process.env.REACT_APP_API_URL; 
 // Create an instance of Axios with default settings
 const axiosInstance = axios.create({
   baseURL,

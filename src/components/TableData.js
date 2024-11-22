@@ -10,6 +10,7 @@ import {
   Box,
   Typography,
   Button,
+  Chip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -37,7 +38,7 @@ const DataTable = ({
           </Typography>
           {onAddClick && (
             <Button onClick={onAddClick}>
-              <AddIcon /> Add {title}
+              <AddIcon /> Add
             </Button>
           )}
         </Box>
@@ -61,18 +62,15 @@ const DataTable = ({
                 {columns.map((column) => (
                   <TableCell key={column.field}>
                     {column.transform ? (
-                      column.transform(row[column.field])
+                      column.transform(row[column.field],row.id)
                     ) : column.field === "status" && getStatusStyles ? (
-                      <Typography
-                        variant="span"
+                      <Chip
                         sx={{
-                          padding: "5px 10px",
-                          borderRadius: "4px",
                           ...getStatusStyles(row[column.field]),
                         }}
-                      >
-                        {row[column.field]}
-                      </Typography>
+                        label={row[column.field]}
+                        size="small"
+                      />
                     ) : (
                       row[column.field]
                     )}

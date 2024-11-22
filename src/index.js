@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchSettings } from './hooks/react-query/role-permission';
 
 const queryClient = new QueryClient();
-queryClient.prefetchQuery(["settings"], fetchSettings);
+queryClient.prefetchQuery({queryKey : ["settings"], queryFn : fetchSettings});
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -27,6 +27,31 @@ const getFlats = async (page, rowsPerPage) => {
   );
   return response.data;
 };
+export const flatColumns = [
+  { field: "name", label: "Name" },
+  { field: "size", label: "Size", transform: (value) => `${value} sqft` },
+  { field: "price", label: "Price" },
+  { field: "status", label: "Status" },
+];
+const handleAddFlat = () => {
+  console.log("Redirect to Add Flat form");
+};
+
+export const flatRenderActions = (row, index) => (
+  <Link to={`/property/${2}/flat/${index + 1}`}>View Details</Link>
+);
+export const flatStatusStyles = (status) => {
+  switch (status.toLowerCase()) {
+    case "available":
+      return { backgroundColor: "#d4edda", color: "#155724" };
+    case "sold":
+      return { backgroundColor: "#f8d7da", color: "#721c24" };
+    case "reserved":
+      return { backgroundColor: "#fff3cd", color: "#856404" };
+    default:
+      return { backgroundColor: "#e2e3e5", color: "#383d41" };
+  }
+};
 
 const FlatList = () => {
   document.title = "Flats";
@@ -88,31 +113,7 @@ const FlatList = () => {
 
   if (isLoading) return <ProgressBar />;
   if (error) return <div>Error loading properties!</div>;
-  const columns = [
-    { field: "name", label: "Name" },
-    { field: "size", label: "Size", transform: (value) => `${value} sqft` },
-    { field: "price", label: "Price" },
-    { field: "status", label: "Status" },
-  ];
-  const handleAddFlat = () => {
-    console.log("Redirect to Add Flat form");
-  };
-
-  const renderActions = (row, index) => (
-    <Link to={`/property/${2}/flat/${index + 1}`}>View Details</Link>
-  );
-  const flatStatusStyles = (status) => {
-    switch (status.toLowerCase()) {
-      case "available":
-        return { backgroundColor: "#d4edda", color: "#155724" };
-      case "sold":
-        return { backgroundColor: "#f8d7da", color: "#721c24" };
-      case "reserved":
-        return { backgroundColor: "#fff3cd", color: "#856404" };
-      default:
-        return { backgroundColor: "#e2e3e5", color: "#383d41" };
-    }
-  };
+ 
   
   return (
     <React.Fragment>
@@ -126,9 +127,9 @@ const FlatList = () => {
         >
           <DataTable
             title="Flats"
-            columns={columns}
+            columns={flatColumns}
             data={data.data}
-            actions={renderActions}
+            actions={flatRenderActions}
             onAddClick={handleAddFlat}
             currency={settings.currency}
             getStatusStyles={flatStatusStyles}

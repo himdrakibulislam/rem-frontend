@@ -1,6 +1,6 @@
 // src/components/RolesList.js
 import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQueryClient } from "@tanstack/react-query";
 
 import {
   Table,
@@ -14,7 +14,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { getAllRolesWithPermissions } from "../hooks/react-query/role-permission";
+import {  useAllRolesWithPermissions } from "../hooks/react-query/role-permission";
 import ProgressBar from "./ProgressBar";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CreateRole from "./CreateRole";
@@ -31,10 +31,7 @@ function RolePermission() {
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ["rolesWithPermissions"],
-    queryFn: getAllRolesWithPermissions,
-  });
+  } = useAllRolesWithPermissions();
   const handleRoleUpdateSuccess = () => {
     queryClient.invalidateQueries({queryKey:["rolesWithPermissions"]}); // Invalidate the query to trigger a refetch
   };

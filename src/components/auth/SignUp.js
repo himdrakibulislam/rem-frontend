@@ -17,13 +17,18 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { registerUserRequest } from "../../hooks/react-query/auth";
+import {
+  registerUserRequest,
+  useSignUpData,
+} from "../../hooks/react-query/auth";
 import { toast } from "react-toastify";
-import WestIcon from '@mui/icons-material/West';
+import WestIcon from "@mui/icons-material/West";
+import ProgressBar from "../ProgressBar";
 
 export default function SignUp() {
   const { control, handleSubmit } = useForm();
   const navigate = useNavigate();
+  const { data: signupData, isLoading } = useSignUpData();
   const mutation = useMutation({
     mutationFn: registerUserRequest,
     retry: 1,
@@ -48,6 +53,9 @@ export default function SignUp() {
   const onSubmit = (data) => {
     mutation.mutate(data);
   };
+  if (isLoading) {
+    return <ProgressBar />;
+  }
   return (
     <Container
       maxWidth="md"
@@ -67,12 +75,12 @@ export default function SignUp() {
           width: "100%",
         }}
       >
-        <Box sx={{my:1}}>
-        <Link to="/">
-          <WestIcon fontSize="small" /> Back To Login
-        </Link>
+        <Box sx={{ my: 1 }}>
+          <Link to="/">
+            <WestIcon fontSize="small" /> Back To Login
+          </Link>
         </Box>
-    
+
         <Typography variant="h5" component="h3" sx={{ fontWeight: "bold" }}>
           User Registration
         </Typography>
@@ -110,11 +118,13 @@ export default function SignUp() {
                           control={<Radio />}
                           label="Handed Over Project Client"
                         />
-                        <FormControlLabel
-                          value="tenant"
-                          control={<Radio />}
-                          label="Tenant"
-                        />
+                        {signupData.tenant_option_enabled === "true" && (
+                          <FormControlLabel
+                            value="tenant"
+                            control={<Radio />}
+                            label="Tenant"
+                          />
+                        )}
                       </RadioGroup>
                       {error && (
                         <Typography color="error">{error.message}</Typography>
@@ -693,12 +703,14 @@ export default function SignUp() {
                     </Typography>
                     <FormControl fullWidth variant="outlined" error={!!error}>
                       <Select {...field} displayEmpty>
-                      <MenuItem value="">
+                        <MenuItem value="">
                           <em>Select an option</em>
                         </MenuItem>
-                        <MenuItem value="option1">Option 1</MenuItem>
-                        <MenuItem value="option2">Option 2</MenuItem>
-                        <MenuItem value="option3">Option 3</MenuItem>
+                        {signupData.properties.map((property) => (
+                          <MenuItem key={property.id} value={property.id}>
+                            {property.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                       {error && (
                         <Typography variant="caption" color="error">
@@ -730,9 +742,12 @@ export default function SignUp() {
                         <MenuItem value="">
                           <em>Select an option</em>
                         </MenuItem>
-                        <MenuItem value="option1">Option 1</MenuItem>
-                        <MenuItem value="option2">Option 2</MenuItem>
-                        <MenuItem value="option3">Option 3</MenuItem>
+                        {signupData.flats[1] &&
+                          signupData.flats[1].map((flat) => (
+                            <MenuItem key={flat.id} value={flat.id}>
+                              {flat.name}
+                            </MenuItem>
+                          ))}
                       </Select>
                       {error && (
                         <Typography variant="caption" color="error">

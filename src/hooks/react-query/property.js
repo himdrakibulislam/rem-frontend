@@ -13,3 +13,8 @@ export const getAPropertyRequest = async (id) => {
   const response = await axios.get(`api/properties/${id}`);
   return response.data;
 };
+// flats
+export const getAFlatRequest = async (id) => {
+  const response = await axios.get(`api/flats/${id}`);
+  return response.data;
+};

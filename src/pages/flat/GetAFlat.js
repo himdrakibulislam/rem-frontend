@@ -1,42 +1,38 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { grey } from "@mui/material/colors";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import HouseOutlinedIcon from "@mui/icons-material/HouseOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CustomTabComponent from "../../components/CustomTab";
+import DataTable from "../../components/TableData";
+import { useSettings } from "../../hooks/react-query/role-permission";
+import {
+  flatPaymentStyles,
+  paymentColumns,
+  renderPaymentActions,
+} from "../../components/PaymentList";
+import { useQuery } from "@tanstack/react-query";
+import { getAFlatRequest } from "../../hooks/react-query/property";
+import ProgressBar from "../../components/ProgressBar";
+import { flatStatusStyles } from "../../components/FlatList";
+import { formatCurrency, formatTimestamp } from "../../utiles/functions";
 
 export default function GetAFlatDetails() {
-  document.title = "Flat";
-  const getCurrentDate = () => {
-    const today = new Date();
-    const month = today.getMonth() + 1; // Months are 0-indexed, so add 1
-    const day = today.getDate();
-    const year = today.getFullYear();
-    return `${month}/${day}/${year}`;
-  };
-  function createData(date, amount, type, status) {
-    return { date, amount, type, status };
+  document.title = "Flat 303";
+  const { flatId } = useParams();
+  const { data: settings } = useSettings();
+  const { data, isLoading } = useQuery({
+    queryKey: ["getAflat", flatId],
+    queryFn: () => getAFlatRequest(flatId),
+    keepPreviousData: true,
+  });
+  const columns = paymentColumns(settings);
+  if (isLoading) {
+    return <ProgressBar />;
   }
-  const rows = [
-    createData("10/12/2024", "$600", "Down Payment", "Paid"),
-    createData("10/11/2024", "$300", "Monthly Installment", "Unpaid"),
-  ];
   return (
     <React.Fragment>
       <Box sx={{ mb: 2 }}>
@@ -45,10 +41,10 @@ export default function GetAFlatDetails() {
         </Link>
       </Box>
       <Typography variant="h5" fontWeight="bold">
-        Flat 101
+        {data.name}
       </Typography>
       <Typography variant="span" sx={{ color: "#757575" }}>
-        Sunset villa
+        {data.property.name}
       </Typography>
       <Box sx={{ mb: 2 }}>
         <Grid container spacing={2}>
@@ -76,7 +72,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    <RoomOutlinedIcon /> 123 Ocean View, Beachtown
+                    <RoomOutlinedIcon /> {data.address}
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>Size</Typography>
                   <Typography
@@ -84,7 +80,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    <HouseOutlinedIcon /> 34567 sq ft
+                    <HouseOutlinedIcon /> {data.size} sq ft
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>
                     Bathrooms
@@ -94,7 +90,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    2
+                    {data.bathrooms}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -106,7 +102,8 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    $ 4000
+                    {formatCurrency(settings.currency,data.price)}
+               
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>
                     Bedrooms
@@ -116,18 +113,16 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    3
+                    {data.bedrooms}
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>
                     Status
                   </Typography>
-                  <Typography
+                  <Chip
                     fontWeight="500"
-                    sx={{ fontSize: "15px" }}
-                    variant="address"
-                  >
-                    Sold
-                  </Typography>
+                    sx={{ fontSize: "15px", ...flatStatusStyles(data.status) }}
+                    label={data.status}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -156,7 +151,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    <CalendarMonthOutlinedIcon /> {getCurrentDate()}
+                    <CalendarMonthOutlinedIcon /> {formatTimestamp(data.created_at)}
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>
                     {" "}
@@ -167,7 +162,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    $3000
+                    {formatCurrency(settings.currency,data.price)}
                   </Typography>
                   <Typography sx={{ color: grey[700], mt: 2 }}>
                     Installment Amount
@@ -199,7 +194,7 @@ export default function GetAFlatDetails() {
                     sx={{ fontSize: "15px" }}
                     variant="address"
                   >
-                    <CalendarMonthOutlinedIcon /> {getCurrentDate()}
+                    <CalendarMonthOutlinedIcon /> {formatTimestamp(data.created_at)}
                   </Typography>
                   <Box sx={{ mt: 2 }}>
                     <Button sx={{ width: "100%" }}>Make Payment</Button>
@@ -216,55 +211,27 @@ export default function GetAFlatDetails() {
           {
             label: "Payment History",
             content: (
-                <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell colSpan={5}>
-                        {/* Table Title Section */}
-                        <Box sx={{ mb: 2 }}>
-                          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
-                            Payment History
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                            A record of all payments made for this flat
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                    {/* Table Column Headers */}
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Type</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Action</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell>{row.date}</TableCell>
-                        <TableCell>{row.amount}</TableCell>
-                        <TableCell>{row.type}</TableCell>
-                        <TableCell><Chip label={row.status} color={row.status === 'Paid' ? 'success' : 'error'} size="small" /></TableCell>
-                        <TableCell>{row.status === "Paid" ? <Chip label="Paid" color="success" size="small" /> : <Button>Pay Now</Button>}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              
+              <>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
+                    Payment History
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    A record of all payments made for this flat
+                  </Typography>
+                </Box>
+                <DataTable
+                  columns={columns}
+                  data={data.payments}
+                  actions={renderPaymentActions}
+                  getStatusStyles={flatPaymentStyles}
+                />
+              </>
             ),
           },
           {
             label: "Documents",
-            content: "Documents",
+            content: "Loading............",
           },
         ]}
       />

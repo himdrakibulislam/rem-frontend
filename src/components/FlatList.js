@@ -27,12 +27,14 @@ const getFlats = async (page, rowsPerPage) => {
   );
   return response.data;
 };
-export const flatColumns = [
-  { field: "name", label: "Name" },
-  { field: "size", label: "Size", transform: (value) => `${value} sqft` },
-  { field: "price", label: "Price" },
-  { field: "status", label: "Status" },
-];
+export const flatColumns = (settings) => {
+  return [
+    { field: "name", label: "Name" },
+    { field: "size", label: "Size", transform: (value) => `${value} sqft` },
+    { field: "price", label: "Price" , transform : (value) => `${settings.currency +' '+value}`},
+    { field: "status", label: "Status" },
+  ];
+};
 const handleAddFlat = () => {
   console.log("Redirect to Add Flat form");
 };
@@ -55,7 +57,6 @@ export const flatStatusStyles = (status) => {
 
 const FlatList = () => {
   document.title = "Flats";
-
   // States for pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -66,7 +67,8 @@ const FlatList = () => {
     queryFn: () => getFlats(page, rowsPerPage), // Query function
     keepPreviousData: true, // To keep previous data while loading new data
   });
-  const {data: settings} = useSettings();
+  const { data: settings } = useSettings();
+  const Columns = flatColumns(settings)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -77,7 +79,7 @@ const FlatList = () => {
   };
   const [open, setOpen] = useState(false);
   const { control, handleSubmit } = useForm();
-  // const handleOpen = () => setOpen(true); 
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -113,8 +115,7 @@ const FlatList = () => {
 
   if (isLoading) return <ProgressBar />;
   if (error) return <div>Error loading properties!</div>;
- 
-  
+
   return (
     <React.Fragment>
       <div style={{ overflowX: "auto" }}>
@@ -127,7 +128,7 @@ const FlatList = () => {
         >
           <DataTable
             title="Flats"
-            columns={flatColumns}
+            columns={Columns}
             data={data.data}
             actions={flatRenderActions}
             onAddClick={handleAddFlat}

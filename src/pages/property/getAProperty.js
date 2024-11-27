@@ -13,6 +13,7 @@ import {
   flatStatusStyles,
 } from "../../components/FlatList";
 import ProgressBar from "../../components/ProgressBar";
+import { useSettings } from "../../hooks/react-query/role-permission";
 
 export default function GetAProperty() {
   const { id } = useParams();
@@ -21,6 +22,8 @@ export default function GetAProperty() {
     queryFn: () => getAPropertyRequest(id), // Call the function with `id`
     keepPreviousData: true,
   });
+  const {data:settings} = useSettings();
+  const getFlatColumns = flatColumns(settings)
   const dashboardData = [
     {
       title: "Total Flats",
@@ -74,7 +77,7 @@ export default function GetAProperty() {
               {data.flats.length > 0 ? 
               <DataTable
               title="Flats"
-              columns={flatColumns}
+              columns={getFlatColumns}
               data={data.flats}
               actions={flatRenderActions}
               // onAddClick={handleAddFlat}

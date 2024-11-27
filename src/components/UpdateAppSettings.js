@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Button, Typography, Box } from "@mui/material";
+import { TextField, Button, Typography, Box, FormControlLabel, Switch } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { toast } from "react-toastify";
@@ -19,7 +19,8 @@ const UpdateAppSettings = ({ settings }) => {
   } = useForm({
     defaultValues: {
       business_name: settings.business_name,
-      currency: settings.currency
+      currency: settings.currency,
+      tenant_option_enabled: settings.tenant_option_enabled === 'true'
     },
   });
   const mutation = useMutation({
@@ -124,6 +125,24 @@ const UpdateAppSettings = ({ settings }) => {
               </Typography>
             )}
           </>
+        )}
+      />
+         {/* Tenant Option Enabled Field */}
+         <Controller
+        name="tenant_option_enabled"
+        control={control}
+        render={({ field }) => (
+          <FormControlLabel
+            control={
+              <Switch
+                {...field}
+                checked={field.value}
+                onChange={(e) => setValue("tenant_option_enabled", e.target.checked)}
+              />
+            }
+            label="Enable Tenant Option"
+            sx={{ mt: 2 }}
+          />
         )}
       />
 

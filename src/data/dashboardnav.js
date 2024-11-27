@@ -2,6 +2,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import HomeIcon from '@mui/icons-material/Home';
 
 export const DASHBOARD_NAVIGATION = [
   {
@@ -15,6 +16,12 @@ export const DASHBOARD_NAVIGATION = [
     title: "Properties",
     icon: <ApartmentIcon />,
     requiredPermissions: ["view_properties"]
+  },
+  {
+    path: "flats",
+    title: "Flats",
+    icon: <HomeIcon />
+    // requiredPermissions: ["view_properties"]
   },
   {
     path: "users-permission",

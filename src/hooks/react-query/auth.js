@@ -31,6 +31,10 @@ export const changePasswordRequest = async (credentials) => {
     const response = await axios.post('/api/auth/password/change',credentials); 
     return response.data;
 };
+export const signUpDataRequest = async (credentials) => {
+    const response = await axios.get('/api/auth/signup-data',credentials); 
+    return response.data;
+};
 
 export function useAuthMe() {
     return useQuery({
@@ -41,3 +45,11 @@ export function useAuthMe() {
     });
 }
 
+// signup-data
+export function useSignUpData() {
+    return useQuery({
+        queryKey: ['getSignUpData'], 
+        queryFn: signUpDataRequest,
+        staleTime: 10 * 60 * 1000, // 5 minutes
+    });
+}

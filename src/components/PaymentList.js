@@ -18,6 +18,7 @@ import { createPropertyRequest } from "../hooks/react-query/property";
 import UpdatePropertyModal from "./UpdatePropertyModal";
 import DataTable from "./TableData";
 import { useSettings } from "../hooks/react-query/role-permission";
+import { formatTimestamp } from "../utiles/functions";
 
 // Function to fetch user data
 const getPayments = async (page, rowsPerPage) => {
@@ -25,6 +26,35 @@ const getPayments = async (page, rowsPerPage) => {
     `/api/payments?page=${page + 1}&offset=${rowsPerPage}`
   );
   return response.data;
+};
+export const paymentColumns = (settings) => [
+  { field: "created_at", label: "Date",transform: (value) => formatTimestamp(value)},
+  { field: "amount", label: "Amount", transform: (value) => `${settings.currency + ' ' + value}` },
+  { field: "type", label: "Type" },
+  { field: "status", label: "Status" },
+];
+export const renderPaymentActions = (row, index) => ( row.status !== "paid" ? <Button>Pay</Button> : 
+  <Typography
+  variant="span"
+  sx={{
+    padding: "5px 10px",
+    borderRadius: "4px",
+    backgroundColor: "#d4edda",
+    color: "#155724",
+  }}
+>Paid</Typography>
+);
+export const flatPaymentStyles = (status) => {
+  switch (status.toLowerCase()) {
+    case "paid":
+      return { backgroundColor: "#d4edda", color: "#155724" };
+    case "overdue":
+      return { backgroundColor: "#f8d7da", color: "#721c24" };
+    case "pending":
+      return { backgroundColor: "#fff3cd", color: "#856404" };
+    default:
+      return { backgroundColor: "#e2e3e5", color: "#383d41" };
+  }
 };
 
 const PaymentList = () => {
@@ -41,6 +71,7 @@ const PaymentList = () => {
     keepPreviousData: true, // To keep previous data while loading new data
   });
   const {data: settings} = useSettings();
+  const columns = paymentColumns(settings)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -87,36 +118,7 @@ const PaymentList = () => {
 
   if (isLoading) return <ProgressBar />;
   if (error) return <div>Error loading payments!</div>;
-  const columns = [
-    { field: "created_at", label: "Date" },
-    { field: "amount", label: "Amount", transform: (value) => `${settings.currency + ' '+value}` },
-    { field: "type", label: "Type" },
-    { field: "status", label: "Status" },
-  ];
-
-  const renderActions = (row, index) => ( row.status === "paid" ? <Button>Pay</Button> : 
-    <Typography
-    variant="span"
-    sx={{
-      padding: "5px 10px",
-      borderRadius: "4px",
-      backgroundColor: "#d4edda",
-      color: "#155724",
-    }}
-  >Paid</Typography>
-  );
-  const flatStatusStyles = (status) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-        return { backgroundColor: "#d4edda", color: "#155724" };
-      case "overdue":
-        return { backgroundColor: "#f8d7da", color: "#721c24" };
-      case "pending":
-        return { backgroundColor: "#fff3cd", color: "#856404" };
-      default:
-        return { backgroundColor: "#e2e3e5", color: "#383d41" };
-    }
-  };
+ 
   
   return (
     <React.Fragment>
@@ -129,13 +131,12 @@ const PaymentList = () => {
           }}
         >
           <DataTable
-          title="Payments"
+            title="Payments"
             columns={columns}
             data={data.data}
-            actions={renderActions}
-            
+            actions={renderPaymentActions}
             currency={settings.currency}
-            getStatusStyles={flatStatusStyles}
+            getStatusStyles={flatPaymentStyles}
           />
         </Box>
       </div>

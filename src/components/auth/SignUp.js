@@ -26,9 +26,11 @@ import WestIcon from "@mui/icons-material/West";
 import ProgressBar from "../ProgressBar";
 
 export default function SignUp() {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, watch } = useForm();
   const navigate = useNavigate();
   const { data: signupData, isLoading } = useSignUpData();
+  const selectedProject = watch("project");
+
   const mutation = useMutation({
     mutationFn: registerUserRequest,
     retry: 1,
@@ -96,10 +98,6 @@ export default function SignUp() {
               <Controller
                 name="client_type"
                 control={control}
-                defaultValue=""
-                rules={{
-                  required: "Client type is required",
-                }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <FormControl component="fieldset" fullWidth error={!!error}>
@@ -147,6 +145,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Full Name
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -169,7 +174,6 @@ export default function SignUp() {
                 name="spouce_name"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Spouse name is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -200,6 +204,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Father's Name
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -226,6 +237,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Mother's Name
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -251,7 +269,14 @@ export default function SignUp() {
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
-                      NID No
+                      NID No{" "}
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -273,7 +298,6 @@ export default function SignUp() {
                 name="passport_number"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Passport No is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -308,6 +332,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                       Date of Birth
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       onChange={onChange}
@@ -329,7 +360,6 @@ export default function SignUp() {
                 name="tin_no"
                 control={control}
                 defaultValue=""
-                rules={{ required: "TIN No is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -355,7 +385,6 @@ export default function SignUp() {
                 name="nominee_name"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Nominee name is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -381,7 +410,6 @@ export default function SignUp() {
                 name="relation_with_nominee"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Relation with nominee is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -407,7 +435,6 @@ export default function SignUp() {
                 name="nominee_nid"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Nominee NID  is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -438,6 +465,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Nationality
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -459,7 +493,6 @@ export default function SignUp() {
                 name="duel_citizenship"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Duel Citizenship  is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -490,6 +523,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Contact No
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -522,6 +562,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       E-mail
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -548,6 +595,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Profession
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -569,7 +623,6 @@ export default function SignUp() {
                 name="company_name"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Company name  is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -595,7 +648,6 @@ export default function SignUp() {
                 name="company_address"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Company address is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -621,7 +673,6 @@ export default function SignUp() {
                 name="company_contact"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Company contact is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -652,6 +703,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Present Address
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -676,6 +734,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Permanent Address
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -700,6 +765,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Select Project
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <FormControl fullWidth variant="outlined" error={!!error}>
                       <Select {...field} displayEmpty>
@@ -733,6 +805,13 @@ export default function SignUp() {
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
                       Select Flat
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <FormControl fullWidth variant="outlined" error={!!error}>
                       <Select
@@ -742,12 +821,15 @@ export default function SignUp() {
                         <MenuItem value="">
                           <em>Select an option</em>
                         </MenuItem>
-                        {signupData.flats[1] &&
-                          signupData.flats[1].map((flat) => (
+                        {signupData?.flats[selectedProject]?.length > 0 ? (
+                          signupData.flats[selectedProject].map((flat) => (
                             <MenuItem key={flat.id} value={flat.id}>
                               {flat.name}
                             </MenuItem>
-                          ))}
+                          ))
+                        ) : (
+                          <MenuItem disabled>No flats available</MenuItem>
+                        )}
                       </Select>
                       {error && (
                         <Typography variant="caption" color="error">
@@ -775,7 +857,14 @@ export default function SignUp() {
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
-                      password
+                      Password
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}
@@ -807,7 +896,14 @@ export default function SignUp() {
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
-                      Password confirmation
+                      Password Confirmation
+                      <Typography
+                        component="span"
+                        color="error"
+                        sx={{ ml: 0.5 }}
+                      >
+                        *
+                      </Typography>
                     </Typography>
                     <TextField
                       {...field}

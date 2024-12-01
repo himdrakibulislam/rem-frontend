@@ -20,6 +20,7 @@ const UpdateAppSettings = ({ settings }) => {
     defaultValues: {
       business_name: settings.business_name,
       currency: settings.currency,
+      user_id_prefix: settings.user_id_prefix,
       tenant_option_enabled: settings.tenant_option_enabled === 'true'
     },
   });
@@ -92,6 +93,25 @@ const UpdateAppSettings = ({ settings }) => {
             margin="normal"
             error={!!errors.currency}
             helperText={errors.currency?.message}
+          />
+        )}
+      />
+      {/*  Customer Id Prefix Field */}
+      <Controller
+        name="user_id_prefix"
+        control={control}
+        rules={{
+          required: "Customer Id Prefix is required",
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            variant="outlined"
+            placeholder="Enter Customer ID Prefix"
+            fullWidth
+            margin="normal"
+            error={!!errors.user_id_prefix}
+            helperText={errors.user_id_prefix?.message}
           />
         )}
       />

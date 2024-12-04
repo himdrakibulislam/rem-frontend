@@ -15,6 +15,7 @@ export default function SignIn() {
         justifyContent: "center",
       }}
     >
+      <div id="recaptcha-container"></div>
       <Card sx={{ bgcolor: "black" }}>
         <Box
           sx={{

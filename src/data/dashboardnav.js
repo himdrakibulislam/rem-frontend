@@ -3,25 +3,29 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HomeIcon from '@mui/icons-material/Home';
+import PaymentIcon from '@mui/icons-material/Payment';
 
 export const DASHBOARD_NAVIGATION = [
   {
     path: "dashboard",
     title: "Dashboard",
     icon: <DashboardIcon />,
-    // requiredRoles: ["CEO", "Manager"]
   },
   {
     path: "properties",
     title: "Properties",
     icon: <ApartmentIcon />,
-    requiredPermissions: ["view_properties"]
   },
   {
     path: "flats",
     title: "Flats",
     icon: <HomeIcon />
-    // requiredPermissions: ["view_properties"]
+  },
+  {
+    path: "payments",
+    title: "Payments",
+    icon: <PaymentIcon />,
+    requiredPermissions: ["manage_payments"]
   },
   {
     path: "users-permission",
@@ -33,5 +37,5 @@ export const DASHBOARD_NAVIGATION = [
     path: "settings",
     title: "Settings",
     icon: <SettingsOutlinedIcon />
-  },
+  }
 ];

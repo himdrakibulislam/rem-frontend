@@ -13,6 +13,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  InputAdornment
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,8 +30,7 @@ export default function SignUp() {
   const { control, handleSubmit, watch } = useForm();
   const navigate = useNavigate();
   const { data: signupData, isLoading } = useSignUpData();
-  const selectedProject = watch("project");
-
+  const selectedProject = watch("property_id");
   const mutation = useMutation({
     mutationFn: registerUserRequest,
     retry: 1,
@@ -53,11 +53,16 @@ export default function SignUp() {
     },
   });
   const onSubmit = (data) => {
-    mutation.mutate(data);
+    const modifiedData = {
+      ...data,
+      contact: `+88${data.contact}`,
+    };
+    mutation.mutate(modifiedData);
   };
   if (isLoading) {
     return <ProgressBar />;
   }
+
   return (
     <Container
       maxWidth="md"
@@ -518,7 +523,10 @@ export default function SignUp() {
                 name="contact"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Contact  is required" }}
+                rules={{ required: "Contact  is required", pattern: {
+                  value: /^\d{11}$/,
+                  message: "Contact number must be 11 digits",
+                }, }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
@@ -534,10 +542,18 @@ export default function SignUp() {
                     <TextField
                       {...field}
                       sx={{ my: 1, py: 0 }}
-                      type="text"
+                      type="number"
                       variant="outlined"
                       placeholder="Enter contact number"
                       fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            +88
+                          </InputAdornment>
+                        ),
+                      }}
+                                           
                       error={!!error}
                       helperText={error ? error.message : ""}
                     />
@@ -757,14 +773,14 @@ export default function SignUp() {
             {/* project */}
             <Grid item xs={12} md={6}>
               <Controller
-                name="project"
+                name="property_id"
                 control={control}
                 defaultValue=""
                 rules={{ required: "Project selection is required" }}
                 render={({ field, fieldState: { error } }) => (
                   <>
                     <Typography variant="body1" sx={{ my: 0, py: 0 }}>
-                      Select Project
+                      Select Property
                       <Typography
                         component="span"
                         color="error"
@@ -797,7 +813,7 @@ export default function SignUp() {
             {/* flat */}
             <Grid item xs={12} md={6}>
               <Controller
-                name="flat"
+                name="flat_id"
                 control={control}
                 defaultValue=""
                 rules={{ required: "Flat is required" }}

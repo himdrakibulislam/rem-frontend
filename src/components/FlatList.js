@@ -9,7 +9,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "../lib/axios/axios";
 import ProgressBar from "./ProgressBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import CustomModal from "./CustomModal";
 import { Controller, useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ import { createPropertyRequest } from "../hooks/react-query/property";
 import UpdatePropertyModal from "./UpdatePropertyModal";
 import DataTable from "./TableData";
 import { useSettings } from "../hooks/react-query/role-permission";
+import { useAuth } from "../context/AuthContext";
 
 // Function to fetch user data
 const getFlats = async (page, rowsPerPage) => {
@@ -31,16 +32,29 @@ export const flatColumns = (settings) => {
   return [
     { field: "name", label: "Name" },
     { field: "size", label: "Size", transform: (value) => `${value} sqft` },
-    { field: "price", label: "Price" , transform : (value) => `${settings.currency +' '+value}`},
+    {
+      field: "price",
+      label: "Price",
+      transform: (value) => `${settings.currency + " " + value}`,
+    },
     { field: "status", label: "Status" },
   ];
 };
-const handleAddFlat = () => {
-  console.log("Redirect to Add Flat form");
-};
 
 export const flatRenderActions = (row, index) => (
-  <Link to={`/property/${2}/flat/${index + 1}`}>View Details</Link>
+  <>
+    <Button component={Link} size="small" to={`/flat/edit/${row.id}`}>
+      Edit
+    </Button>
+    <Button
+      component={Link}
+      size="small"
+      to={`/property/${row.property_id}/flat/${row.id}}`}
+      sx={{ mx: 1 }}
+    >
+      View Details
+    </Button>
+  </>
 );
 export const flatStatusStyles = (status) => {
   switch (status.toLowerCase()) {
@@ -57,6 +71,8 @@ export const flatStatusStyles = (status) => {
 
 const FlatList = () => {
   document.title = "Flats";
+  const navigate = useNavigate();
+  const { hasPermission } = useAuth();
   // States for pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -68,7 +84,10 @@ const FlatList = () => {
     keepPreviousData: true, // To keep previous data while loading new data
   });
   const { data: settings } = useSettings();
-  const Columns = flatColumns(settings)
+  const Columns = flatColumns(settings);
+  const handleAddFlat = () => {
+    navigate("/flat/add");
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -130,8 +149,21 @@ const FlatList = () => {
             title="Flats"
             columns={Columns}
             data={data.data}
-            actions={flatRenderActions}
-            onAddClick={handleAddFlat}
+            actions={
+              hasPermission("manage_flats")
+                ? flatRenderActions
+                : (row) => (
+                    <Button
+                      component={Link}
+                      size="small"
+                      to={`/property/${row.property_id}/flat/${row.id}}`}
+                      sx={{ mx: 1 }}
+                    >
+                      View Details
+                    </Button>
+                  )
+            }
+            onAddClick={hasPermission("manage_flats") ? handleAddFlat : null}
             currency={settings.currency}
             getStatusStyles={flatStatusStyles}
           />

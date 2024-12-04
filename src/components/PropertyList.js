@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  TablePagination,
-  Typography,
-  Button,
-  TextField,
-} from "@mui/material";
+import { TablePagination, Typography, Button, TextField } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "../lib/axios/axios";
 import ProgressBar from "./ProgressBar";
@@ -17,6 +12,7 @@ import { createPropertyRequest } from "../hooks/react-query/property";
 import UpdatePropertyModal from "./UpdatePropertyModal";
 import DataTable from "./TableData";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 // Function to fetch user data
 const getProperties = async (page, rowsPerPage) => {
@@ -32,7 +28,7 @@ const PropertyList = () => {
   // States for pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const { hasPermission } = useAuth();
   // Fetch data using React Query
   const { data, isLoading, error } = useQuery({
     queryKey: ["getProperties", page, rowsPerPage], // Query key with dependencies
@@ -84,10 +80,14 @@ const PropertyList = () => {
     mutation.mutate(data);
   };
   const columns = [
-    { field: "name", label: "Name" , transform : (value,id) => <Link to={`/property/${id}`}>{value}</Link>},
+    {
+      field: "name",
+      label: "Name",
+      transform: (value, id) => <Link to={`/property/${id}`}>{value}</Link>,
+    },
     {
       field: "address",
-      label: "Address"
+      label: "Address",
     },
     { field: "flats_count", label: "Total Flats" },
     { field: "available_flats_count", label: "Availablle Flats" },
@@ -107,8 +107,8 @@ const PropertyList = () => {
           title="Projects"
           columns={columns}
           data={data.data}
-          actions={renderActions}
-          onAddClick={handleOpen}
+          actions={ hasPermission("manage_properties") ?  renderActions : null}
+          onAddClick={hasPermission("manage_properties") ? handleOpen : null}
         />
       </div>
       <TablePagination

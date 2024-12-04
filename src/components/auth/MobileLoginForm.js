@@ -1,16 +1,15 @@
 import { Box, Button, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import PhoneIcon from "@mui/icons-material/Phone";
-import { useForm, Controller } from 'react-hook-form';
-
+import { useForm, Controller } from "react-hook-form";
 
 function MobileLoginForm() {
-  
+
   const { control, handleSubmit } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-    };
+  const onSubmit = async (data) => {
+   
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -35,12 +34,12 @@ function MobileLoginForm() {
               ),
             }}
             error={!!error}
-            helperText={error ? error.message : ''}
+            helperText={error ? error.message : ""}
           />
         )}
       />
-       {/* OTP Field */}
-       <Controller
+      {/* OTP Field */}
+      <Controller
         name="otp"
         control={control}
         defaultValue=""
@@ -55,7 +54,7 @@ function MobileLoginForm() {
             margin="normal"
             InputLabelProps={{ sx: { color: "gray.400" } }}
             error={!!error}
-            helperText={error ? error.message : ''}
+            helperText={error ? error.message : ""}
           />
         )}
       />

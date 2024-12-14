@@ -50,12 +50,11 @@ const UpdateAppSettings = ({ settings }) => {
           justifyContent: "center",
           alignItems: "center",
           padding: "4px",
-
-          maxWidth: 250,
+          maxWidth: 150,
           margin: "auto",
         }}
       >
-        <Image src={settings.logo} className="w-50 h-50" />
+        <Image src={settings.logo} className="w-24 h-24" />
       </Box>
       {/* Business Name Field */}
       <Controller

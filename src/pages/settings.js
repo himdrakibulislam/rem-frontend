@@ -23,6 +23,7 @@ import ProgressBar from "../components/ProgressBar";
 import CustomTabComponent from "../components/CustomTab";
 import EmailSettingsForm from "../components/EmailSettingsForm";
 import { useEmailSettings } from "../hooks/react-query/settings";
+import PaymentsAddons from "../components/PaymentsAddons/PaymentsAddons";
 const Settings = () => {
   const { data: settings, isLoading } = useSettings();
   const { data: email_settings } = useEmailSettings();
@@ -239,6 +240,10 @@ const Settings = () => {
                 </Grid>
               </Grid>
             ),
+          },
+          hasPermission("settings") && {
+            label: "Payments Addons",
+            content:<PaymentsAddons/>,
           },
         ].filter(Boolean)}
       />

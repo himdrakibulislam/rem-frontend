@@ -831,7 +831,7 @@ export default function SignUp() {
                     </Typography>
                     <FormControl fullWidth variant="outlined" error={!!error}>
                       <Select
-                        {...field} // Bind field properties to Select
+                        {...field} 
                         displayEmpty
                       >
                         <MenuItem value="">

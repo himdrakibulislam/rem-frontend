@@ -18,6 +18,7 @@ import Flat from "./pages/flat/flat";
 import UserDetails from "./pages/UserDetails";
 import AddFlat from "./pages/flat/AddFlat";
 import PaymentList from "./components/PaymentList";
+import MakePayment from "./components/Payments/MakePayment";
 
 const AppRoutes = () => (
   <Routes>
@@ -38,6 +39,7 @@ const AppRoutes = () => (
       <Route path="/users-permission" element={<UsersPermission/>} />
       <Route path="/users-permission/user/:id" element={<UserDetails/>} />
       <Route path="/payments" element={<PaymentList/>} />
+      <Route path="/payment/create" element={<MakePayment/>} />
       <Route path="/settings" element={<Settings/>} />
     </Route>
     <Route path="*" element={<NotFound />} />

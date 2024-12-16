@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import DataTable from "./TableData";
 import { useSettings } from "../hooks/react-query/role-permission";
 import { formatTimestamp } from "../utiles/functions";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { updatePaymentRequest } from "../hooks/react-query/payment";
 
 // Function to fetch user data
@@ -45,7 +45,7 @@ export const paymentColumns = (settings) => [
 ];
 export const renderPaymentActions = (row, index, handleOpen, isPaymentPage) => (
   <>
-    {row.status !== "paid" ? (
+    {row.status === "pending" || row.status === "overdue"? (
       <Button size="small">Pay</Button>
     ) : (
       <Typography
@@ -62,7 +62,7 @@ export const renderPaymentActions = (row, index, handleOpen, isPaymentPage) => (
       </Typography>
     )}
     {isPaymentPage && (
-      <Button size="small" onClick={() =>handleOpen(row.id)} sx={{ mx: 1 }}>
+      <Button size="small" onClick={() =>handleOpen(row)} sx={{ mx: 1 }}>
         Edit
       </Button>
     )}
@@ -76,6 +76,8 @@ export const flatPaymentStyles = (status) => {
       return { backgroundColor: "#f8d7da", color: "#721c24" };
     case "pending":
       return { backgroundColor: "#fff3cd", color: "#856404" };
+    case "completed":
+      return { backgroundColor: "#d4edda", color: "#155724" };
     default:
       return { backgroundColor: "#e2e3e5", color: "#383d41" };
   }
@@ -106,11 +108,11 @@ const PaymentList = () => {
     setPage(0); // Reset page to 0 when rows per page changes
   };
   const [open, setOpen] = useState(false);
-  const [selectedPaymentId, setSelectedPaymentId] = useState(0);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const { control, handleSubmit } = useForm();
-  const handleOpen = (id) => {
+  const handleOpen = (payment) => {
     setOpen(true);
-    setSelectedPaymentId(id);
+    setSelectedPayment(payment);
   };
   const handleClose = () => setOpen(false);
 
@@ -131,8 +133,7 @@ const PaymentList = () => {
   });
 
   const onSubmit = (data) => {
-    console.log({...data,id:selectedPaymentId});
-    mutation.mutate({...data,id:selectedPaymentId});
+    mutation.mutate({...data,id:selectedPayment.id});
   };
 
   if (isLoading) return <ProgressBar />;
@@ -140,6 +141,7 @@ const PaymentList = () => {
 
   return (
     <React.Fragment>
+      <Button to="/payment/create" component={Link}>Create Payment</Button>
       <div style={{ overflowX: "auto" }}>
         <Box
           sx={{
@@ -152,6 +154,7 @@ const PaymentList = () => {
             title="Payments"
             columns={columns}
             data={data.data}
+
             actions={(row, index) =>
               renderPaymentActions(row, index, handleOpen, isPaymentPage)
             }
@@ -179,11 +182,11 @@ const PaymentList = () => {
               control={control}
               defaultValue=""
               rules={{
-                required: "Property name is required",
+                required: "Status is required",
               }}
               render={({ field, fieldState: { error } }) => (
                 <FormControl fullWidth variant="outlined" error={!!error}>
-                  <Select {...field} displayEmpty>
+                  <Select {...field}  displayEmpty>
                     <MenuItem value="">
                       <em>Select status</em>
                     </MenuItem>

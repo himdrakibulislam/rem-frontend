@@ -14,6 +14,7 @@ const Image = ({
   alt = "Image",
   className = "",
   lazy = true,
+  style = {}
 }) => {
   const [imgSrc, setImgSrc] = useState(src || defaultSrc);
 
@@ -27,6 +28,7 @@ const Image = ({
       alt={alt}
       className={className}
       onError={handleError}
+      style = {style}
       loading={lazy ? "lazy" : "eager"} // Enables lazy loading for better performance.
     />
   );

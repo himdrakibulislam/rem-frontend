@@ -23,7 +23,7 @@ import ProgressBar from "../components/ProgressBar";
 import CustomTabComponent from "../components/CustomTab";
 import EmailSettingsForm from "../components/EmailSettingsForm";
 import { useEmailSettings } from "../hooks/react-query/settings";
-import PaymentsAddons from "../components/PaymentsAddons/PaymentsAddons";
+import PaymentsAddons from "../components/Payments/PaymentsAddons";
 const Settings = () => {
   const { data: settings, isLoading } = useSettings();
   const { data: email_settings } = useEmailSettings();

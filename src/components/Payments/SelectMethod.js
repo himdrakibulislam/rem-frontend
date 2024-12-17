@@ -7,15 +7,25 @@ import { useAddonSettings } from "../../hooks/react-query/settings";
 import Image from "../Image";
 import { useSettings } from "../../hooks/react-query/role-permission";
 
-function SelectMethod() {
-  const { data, isLoading ,error} = useQuery({
+function SelectMethod({handleNext}) {
+  document.title = "Select Payment Method"
+  const { data, isLoading, error } = useQuery({
     queryKey: ["getAPayment"],
     queryFn: () => getAPaymentRequest(localStorage.getItem("paymentToken")),
   });
   const { data: addonData, isLoading: addonLoading } = useAddonSettings();
   const { data: settings } = useSettings();
-  if(error){
-    return <Typography sx={{textAlign : "center"}}>{error.message || "Error"}</Typography>
+  if (error) {
+    return (
+      <Typography sx={{ textAlign: "center" }}>
+        {error.message || "Error"}
+      </Typography>
+    );
+  }
+  const verifyToPayment = (gateway) => {
+    localStorage.setItem("gateway",gateway)
+    localStorage.setItem("amount_to_pay",data.amount)
+    handleNext()
   }
   if (isLoading || addonLoading) {
     return <ProgressBar />;
@@ -50,40 +60,54 @@ function SelectMethod() {
                 }}
               >
                 {Object.entries(addonData)
-                .filter(([method, details]) => details.type === "mobile_bank") 
-                .map(([method, details]) => (
-                  <Box key={method} sx={{ border: "1px solid #ccc" ,marginRight: "6px" }}>
-                    <Image
-                      src={details.logo_url}
-                      alt={method}
-                      style={{
-                        width: "140px",
-                      }}
-                    />
-                  </Box>
-                ))}
+                  .filter(([method, details]) => details.type === "mobile_bank")
+                  .map(([method, details]) => (
+                    <Box
+                    
+                      key={method}
+                      onClick={() => verifyToPayment(method)}
+                      sx={{ border: "1px solid #ccc", marginRight: "6px",cursor : "pointer" }}
+                    >
+                      <Image
+                        src={details.logo_url}
+                        alt={method}
+                        style={{
+                          width: "140px",
+                        }}
+                      />
+                    </Box>
+                  ))}
               </Box>
             ),
           },
-          { label: "BANK TRANSFER", content: <Box
-            sx={{
-              display: "flex",
-            }}
-          >
-            {Object.entries(addonData)
-            .filter(([method, details]) => details.type === "bank") 
-            .map(([method, details]) => (
-              <Box key={method} sx={{ border: "1px solid #ccc" ,marginRight: "6px" }}>
-                <Image
-                  src={details.logo_url}
-                  alt={method}
-                  style={{
-                    width: "160px",
-                  }}
-                />
+          {
+            label: "BANK TRANSFER",
+            content: (
+              <Box
+                sx={{
+                  display: "flex",
+                }}
+              >
+                {Object.entries(addonData)
+                  .filter(([method, details]) => details.type === "bank")
+                  .map(([method, details]) => (
+                    <Box
+                      key={method}
+                      onClick={() => verifyToPayment(method)}
+                      sx={{ border: "1px solid #ccc", marginRight: "6px",  cursor : "pointer"}}
+                    >
+                      <Image
+                        src={details.logo_url}
+                        alt={method}
+                        style={{
+                          width: "160px",
+                        }}
+                      />
+                    </Box>
+                  ))}
               </Box>
-            ))}
-          </Box>},
+            ),
+          },
         ]}
       />
       <Button sx={{ my: 2 }} fullWidth>

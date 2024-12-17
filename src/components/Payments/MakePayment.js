@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CreatePayment from "./CreatePayment";
 import SelectMethod from "./SelectMethod";
+import VerifyPayment from "./VerifyPayment";
+import Success from "./Success";
 
 const steps = ["Create payment", "Select Method", "Verify Payment"];
 
@@ -58,14 +60,11 @@ export default function MakePayment() {
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
-        return <CreatePayment handleNext={handleNext}/>;
-       case 1:
-        return <SelectMethod />;
+        return <CreatePayment handleNext={handleNext} />;
+      case 1:
+        return <SelectMethod handleNext={handleNext} />;
       case 2:
-        return "Verify Payment";
-   
-      // case 2:
-      //   return <VerifyPayment />;
+        return <VerifyPayment handleNext={handleNext} />;
       default:
         return <Typography>Unknown step</Typography>;
     }
@@ -103,9 +102,9 @@ export default function MakePayment() {
       </Stepper>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
+          <Box sx={{ mt: 2, mb: 1 }}>
+            <Success />
+          </Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleReset}>Reset</Button>
@@ -113,7 +112,7 @@ export default function MakePayment() {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Box sx={{mt:4}}> {renderStepContent(activeStep)}</Box>
+          <Box sx={{ mt: 4 }}> {renderStepContent(activeStep)}</Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"

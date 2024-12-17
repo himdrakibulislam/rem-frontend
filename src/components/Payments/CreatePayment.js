@@ -12,12 +12,13 @@ import { handleValidationErrors } from "../../utiles/errorHandle";
 import { makePaymentRequest } from "../../hooks/react-query/payment";
 
 function CreatePayment({handleNext}) {
+  document.title = "Create Payment";
   const { control, handleSubmit } = useForm();
   const mutation = useMutation({
     mutationFn: makePaymentRequest,
     retry: 1,
     onSuccess: (data) => {
-      handleNext()
+      handleNext();
       localStorage.setItem("paymentToken", data);
       toast.success("Payment created successfully.");
     },

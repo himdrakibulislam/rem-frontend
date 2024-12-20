@@ -16,6 +16,15 @@ export const updateAddonSettings = async ({data,settingsType}) => {
   const response = await axiosInstance.put(`/api/update-addon-settings/${settingsType}`,data);
   return response.data;
 };
+export const addGatewayAddonSettings = async (data) => {
+  const response = await axiosInstance.post("/api/add-new-gateway",data);
+  return response.data;
+};
+export const deleteAddonSettings = async (data) => {
+  console.log(data);
+  const response = await axiosInstance.post("/api/delete-settings-by-type",data);
+  return response.data;
+};
 
 export const useEmailSettings = () => {
   return useQuery({
